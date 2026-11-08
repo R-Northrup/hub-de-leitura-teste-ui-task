@@ -11,7 +11,6 @@ class Cadastrar {
 
 
     //Métodos
-
     fazerCadastro (nome, email, telefone, senha, confirmarSenha){
          if(nome) this.campoNome().clear().type(nome)
          if(email) this.campoEmail().clear().type(email)
@@ -21,9 +20,5 @@ class Cadastrar {
         this.checkTermos().check()
         this.botaoCriarConta().click()
     }
-
-
-    
     }
-
 export default new Cadastrar()

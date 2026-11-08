@@ -8,10 +8,8 @@ class Login {
     //métodos
     fazerLogin(email, senha) {
         if (email) this.campoEmail().clear().type(email)
-        if (senha) this.campoSenha().clear().type(senha)
+        if (senha) this.campoSenha().clear().type(senha, {log: false})
         this.botaoEntrar().click()
     }
 }
-
-
 export default new Login()
