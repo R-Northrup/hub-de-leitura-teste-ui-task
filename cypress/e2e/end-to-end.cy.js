@@ -1,3 +1,8 @@
+/// <reference types = "cypress"/>
+import { faker, fakerPT_BR } from '@faker-js/faker'
+import Cadastrar from '../support/pages/cadastro-page'
+import Login from '../support/pages/login-page'
+
 describe('Testes End To End do fluxo de cadastro e login', () => {
 
     /* 
@@ -18,11 +23,34 @@ describe('Testes End To End do fluxo de cadastro e login', () => {
     */
 
     beforeEach(() => {
-        // Configurações iniciais, se necessário
+       cy.visit('register.html')
     });
 
 
     it('Deve fazer o cadastro e validar o login com o usuário cadastrado', () => {
-        // Criar todo o fluxo aqui dentro deste único "it"
+       //Criando massa de dados
+        let nome1 = fakerPT_BR.person.firstName()
+        let nome2 = fakerPT_BR.person.lastName()
+        let email = fakerPT_BR.internet.email({firstName: nome1, lastName: nome2})
+        let telefone = fakerPT_BR.phone.number()
+        let senha = fakerPT_BR.internet.password({length: 20})
+        let confirmarSenha = senha
+        //Cadastrar
+        Cadastrar.fazerCadastro(
+            `${nome1} ${nome2}`,
+            email,
+            telefone,
+            senha,
+            confirmarSenha)
+        //Confirmar o cadastro
+        cy.url().should('include', 'dashboard')
+        cy.get('.user-info').should('contain', `${nome1} ${nome2}`)
+        //Garantir que não está logado
+        cy.get('.user-actions > .btn-outline-danger').click()
+        //Fazer login com o usuário recém cadastrado
+        Login.fazerLogin(email, senha)
+        //Login bem sucedido ou não
+        cy.url().should('include', 'dashboard')
+        cy.get('.user-info').should('contain', `${nome1} ${nome2}`)
     });
 });
